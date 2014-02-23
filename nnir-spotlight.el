@@ -25,7 +25,7 @@
 ;; used in the following examples, but you can specify it in
 ;; `gnus-secondary-select-methods`, too.)
 ;;
-;; First of all, you should choose which method to use HyperEstraier.
+;; First of all, you should choose which method to use Spotlight.
 ;;
 ;; : (require 'nnir-est)
 ;; : (setq nnir-method-default-engines
