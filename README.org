@@ -1,16 +1,24 @@
 * Spotlight Interface for Gnus nnir Method.
 
-This file provides a Gnus nnir interface for MacOS Spotlight.
-As of it, you must use MacOS X and Spotlight to be enabled.
-You can use this search engine with `nnmh', `nnml', and `nnmaildir'.
+This file provides a Gnus nnir interface for MacOS Spotlight. As of
+it, you need MacOS X and Spotlight enabled. You can use it with
+`nnmh', `nnml', and `nnmaildir' (offlineimap, procmail) methods.
+
+** MailSpool Importer Setup
+
+You may need to install the MailSpool importer, which can create
+appropriate metadata from individual mail spool file. It can be
+downloaded from http://www.yoshidam.net/diary/Spotlight/.
+
+: % cp -pr MailSpool.mdimporter ~/Library/Spotlight/
+: % mdimport -L                  # see if the importer is recognized
+: % mdimport -d2 -n ~/Mail/test  # see if the importer appropriately works.
+: % mdimport ~/Mail              # import!
+: % mdls ~/Mail/test/1           # see if appropriate metadata are created.
 
 ** Emacs Setup
 
-In .emacs, you should set as the following. (`gnus-select-method' is
-used in the following examples, but you can specify it in
-`gnus-secondary-select-methods`, too.)
-
-First of all, you should choose which method to use Spotlight.
+You should choose the methods to be used with Spotlight.
 
 : (require 'nnir-est)
 : (setq nnir-method-default-engines
@@ -19,6 +27,7 @@ First of all, you should choose which method to use Spotlight.
 :          (nntp . gmane)))
 
 If you are using `nnml', specifying mail directory may be sufficient.
+Make sure that the prefix ends with "/".
 
 : ;; nnml/nnmh
 : (setq gnus-select-method '(nnml ""))
@@ -38,11 +47,19 @@ Otherwise, `nnir-spotlight-prefix' will be used.
 
 * Query Format
 
-In `gnus-group-make-nnir-group' query, you can specify following
-attributes in addition to query word.
+In `gnus-group-make-nnir-group' query, you can use the `mdfind'
+query syntax. They can be parenthesized to make a complex
+searching.
 
-- kMDItemTitle== :: Mail Subject
-- kMDItemAuthorEmailAddresses== :: Email author addresses
-- kMDItemAuthors== :: Email author
-- kMDItemRecipientEmailAddresses== :: Email recipients addresses
-- kMDItemRecipients== :: Email recipients
+- kMDItemTitle == :: Mail Subject
+- kMDItemAuthorEmailAddresses == :: Email author addresses
+- kMDItemAuthors == :: Email author
+- kMDItemRecipientEmailAddresses == :: Email recipients addresses
+- kMDItemRecipients == :: Email recipients
+- kMDItemContentCreationDate :: email date
+
+For example, the the following query searches for the mail which
+contains foobar in title and sent within three days, containing
+either foo or bar in content.
+
+: kMDItemTitle == "*foobar*" && kMDItemContentCreationDate >= $time.today(-3) && (foo || bar)
