@@ -35,7 +35,7 @@
 ;;
 ;; You should choose the methods to be used with Spotlight.
 ;;
-;; : (require 'nnir-est)
+;; : (require 'nnir-spotlight)
 ;; : (setq nnir-method-default-engines
 ;; :        '((nnmaildir . spotlight)
 ;; :          (nnml . spotlight)
